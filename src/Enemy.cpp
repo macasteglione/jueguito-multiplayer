@@ -1,5 +1,5 @@
 #include "../include/Enemy.h"
-#include <math.h>
+#include <raymath.h>
 
 Enemy::Enemy(Vector2 _position) : Character(_position)
 {
@@ -25,18 +25,11 @@ void Enemy::Draw() const
 
 void Enemy::FollowTarget(const Vector2 &_targetPosition)
 {
-    // Calculate the direction vector towards the target
-    double dirX = _targetPosition.x - position.x;
-    double dirY = _targetPosition.y - position.y;
+    Vector2 direction = _targetPosition - position;
 
-    // Normalize the direction vector
-    double length = sqrt(dirX * dirX + dirY * dirY);
+    double length = Vector2Length(direction);
     if (length != 0)
-    {
-        dirX /= length;
-        dirY /= length;
-    }
-    // Move the enemy towards the target
-    position.x += dirX * movSpeed;
-    position.y += dirY * movSpeed;
+        direction = Vector2Normalize(direction);
+
+    position += direction * movSpeed;
 }
