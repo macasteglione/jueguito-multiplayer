@@ -1,15 +1,10 @@
 #include "../include/Player.h"
+#include "../include/Constants.h"
+#include <raymath.h>
 
-Player::Player(Vector2 _position) : Character(_position)
+Player::Player(Vector2 _position, std::string _name) : Character(_position)
 {
-    radius = 20;
-}
-
-Player::~Player()
-{
-    // Destructor logic if needed
-    // Currently, no dynamic memory allocation is used, so nothing to clean up
-    // You can add cleanup code here if you allocate resources in the future
+    name = _name;
 }
 
 void Player::Update()
@@ -20,29 +15,45 @@ void Player::Update()
 
 void Player::Draw() const
 {
-    DrawCircle(position.x, position.y, radius, BLUE);
+    DrawCircleV(position, radius, BLUE);
+    DrawText(name.c_str(), (int)(position.x - MeasureText(name.c_str(), TEXT_SIZE) / 2),
+             (int)(position.y - radius - 25), TEXT_SIZE, WHITE);
 }
 
 void Player::SetKeyControls()
 {
-    if (IsKeyDown(KEY_W))
-        position.y -= movSpeed;
-    if (IsKeyDown(KEY_S))
-        position.y += movSpeed;
-    if (IsKeyDown(KEY_A))
-        position.x -= movSpeed;
-    if (IsKeyDown(KEY_D))
-        position.x += movSpeed;
+    Vector2 movement = {0, 0};
+
+    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+        movement.x += 1;
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+        movement.x -= 1;
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))
+        movement.y -= 1;
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S))
+        movement.y += 1;
+
+    if (movement.x != 0 || movement.y != 0)
+    {
+        movement = Vector2Normalize(movement);
+        position.x += movement.x * movSpeed;
+        position.y += movement.y * movSpeed;
+    }
 }
 
 void Player::SetBoundary()
 {
-    if (position.x - radius < 0)
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    // Mantener el jugador dentro de los límites de la pantalla
+    if (position.x < radius)
         position.x = radius;
-    if (position.x + radius > GetScreenWidth())
-        position.x = GetScreenWidth() - radius;
-    if (position.y - radius < 0)
+    else if (position.x > screenWidth - radius)
+        position.x = screenWidth - radius;
+
+    if (position.y < radius)
         position.y = radius;
-    if (position.y + radius > GetScreenHeight())
-        position.y = GetScreenHeight() - radius;
+    else if (position.y > screenHeight - radius)
+        position.y = screenHeight - radius;
 }

@@ -1,29 +1,42 @@
-# Raylib-CPP-Starter-Template-for-VSCODE-V2
-Raylib C++ Starter Template for Visual Studio Code on Windows.
-This demo project contains a bouncing ball raylib example program.
-It works with raylib version 5.0. Tested on both Windows 10 and Windows 11.
+# Simple and portable CMake template for raylib
 
-# How to use this template
-1. Double click on the main.code-workspace file. This will open the template in VS Code.
-2. From the Explorer Window of VS Code navigate to the src folder and double click on the main.cpp file.
-3. Press F5 on the keyboard to compile and run the program.
+This is a basic project template for raylib using CMake and has been tested with Visual Studio, Visual Studio Code and CLion.
 
-# What's changed
-The template now uses folders for better organizion of the files. So, all the source code now lives in the src folder.
+The master branch of the raylib source code is downloaded using CMake FetchContent from github and compiled from source as it is much easier than including prebuilt binaries for every platform and configuration.
 
-# Video Tutorial
+Building from the cmake file will build both raylib and `src/main.c` which includes a basic example of a raylib program.
 
-<p align="center">
-  <img src="preview.jpg" alt="" width="800">
-</p>
+## Asset handling
 
-<p align="center">
-🎥 <a href="https://www.youtube.com/watch?v=PaAcVk5jUd8">Video Tutorial on YouTube</a>
-</p>
+The example in `src/main.c` uses an example image located in the `assets` folder.
+To load it we use `ASSETS_PATH`, which is a string macro with the *absolute* path "assets" directory.
+This macro is defined in the `CMakeLists.txt` file on line `23`.
+ 
+If you plan on releasing or sharing your game consider manually setting the value of the `ASSETS_PATH` macro.
 
-<br>
-<br>
-<p align="center">
-| 📺 <a href="https://www.youtube.com/channel/UC3ivOTE5EgpmF2DHLBmWIWg">My YouTube Channel</a>
-| 🌍 <a href="http://www.programmingwithnick.com">My Website</a> | <br>
-</p>
+In C you can concatenate string literals by putting them next to each other, 
+eg: `"A" "B"` is `"AB"`. So ASSETS_PATH `"test.png"` becomes `"/path/to/your/assets/test.png"`
+
+If you wanna share your game with others you should set ASSETS_PATH to be a *relative* path like "./assets/". You can do this in the CMakeLists.txt file. 
+
+## Using C++
+
+Using c++ is quite simple, just change these lines in the `CMakeLists.txt`
+from
+```
+project(my_raylib_game C)
+
+set(CMAKE_C_STANDARD 99)
+
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/sources/*.c")
+```
+to
+```
+project(my_raylib_game CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/sources/*.cpp")
+```
+After this just reload cmake and it should build fine.

@@ -1,29 +1,20 @@
-#include "include/Player.h"
-#include "include/Enemy.h"
+#include "../include/GameManager.h"
+#include "../include/Constants.h"
 
 int main()
 {
-    constexpr int screenWidth = 800;
-    constexpr int screenHeight = 600;
+    SetExitKey(KEY_NULL);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    InitWindow(screenWidth, screenHeight, "Jueguito");
-    SetTargetFPS(60);
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Jueguito");
+    SetTargetFPS(TARGET_FPS);
 
-    Player *player = new Player(Vector2{screenWidth / 2, screenHeight / 2});
-    Enemy *enemy = new Enemy(Vector2{400, 400});
+    GameManager game;
 
-    while (!WindowShouldClose())
+    while (!game.ShouldClose())
     {
-        player->Update();
-        enemy->FollowTarget(player->GetPosition());
-
-        BeginDrawing();
-        {
-            ClearBackground(BLACK);
-            player->Draw();
-            enemy->Draw();
-        }
-        EndDrawing();
+        game.Update();
+        game.Draw();
     }
 
     CloseWindow();

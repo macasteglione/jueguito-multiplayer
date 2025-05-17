@@ -6,17 +6,18 @@
 class Character
 {
 protected:
-    int movSpeed = 5;
+    float movSpeed = 5.0f;
     Vector2 position;
 
 public:
-    Character(Vector2 _position);
-    virtual ~Character();
+    explicit Character(Vector2 _position);
+    virtual ~Character() = default;
 
     Vector2 GetPosition() const;
     void SetPosition(const Vector2 &_position);
-    double GetMovSpeed() const;
-    void SetMovSpeed(const double &_movSpeed);
+
+    float GetMovSpeed() const;
+    void SetMovSpeed(const float &_movSpeed);
 
     virtual void Draw() const = 0;
     virtual void Update() = 0;

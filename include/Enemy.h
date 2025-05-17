@@ -6,12 +6,12 @@
 class Enemy : public Character
 {
 private:
-    int radius;
+    float radius = 20.0f;
 
 public:
-    Enemy(Vector2 _position);
-    ~Enemy();
-    
+    explicit Enemy(Vector2 _position);
+    ~Enemy() override = default;
+
     void Update() override;
     void Draw() const override;
     void FollowTarget(const Vector2 &_targetPosition);

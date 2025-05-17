@@ -2,18 +2,21 @@
 #define PLAYER_HEADER
 
 #include "Character.h"
+#include <string>
 
 class Player : public Character
 {
 private:
-    int radius;
+    float radius = 20.0f;
+    std::string name;
 
 public:
-    Player(Vector2 _position);
-    ~Player();
-    
+    explicit Player(Vector2 _position, std::string _name);
+    ~Player() override = default;
+
     void SetKeyControls();
     void SetBoundary();
+
     void Draw() const override;
     void Update() override;
 };
