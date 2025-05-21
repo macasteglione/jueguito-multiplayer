@@ -1,39 +1,33 @@
 #include "../include/GameManager.h"
 
-GameManager::GameManager()
-{
-}
+GameManager::GameManager() = default;
 
-GameManager::~GameManager()
-{
+GameManager::~GameManager() {
     UnloadGame();
 }
 
-void GameManager::Update()
-{
-    if (WindowShouldClose())
-    {
+void GameManager::Update() {
+    if (WindowShouldClose()) {
         currentState = GameState::EXIT;
         return;
     }
 
-    switch (currentState)
-    {
-    case GameState::MENU:
-        UpdateMenu();
-        break;
-    case GameState::GAME:
-        UpdateGame();
-        break;
+    switch (currentState) {
+        case GameState::MENU:
+            UpdateMenu();
+            break;
 
-    case GameState::EXIT:
-        break;
+        case GameState::GAME:
+            UpdateGame();
+            break;
+
+        case GameState::EXIT:
+            break;
     }
 }
 
-void GameManager::UpdateMenu()
-{
-    Menu::Option choice = menu.Update();
+void GameManager::UpdateMenu() {
+    const Menu::Option choice = menu.Update();
 
     if (choice == Menu::START)
         StartGame();
@@ -41,10 +35,8 @@ void GameManager::UpdateMenu()
         currentState = GameState::EXIT;
 }
 
-void GameManager::UpdateGame()
-{
-    if (IsKeyPressed(KEY_ESCAPE))
-    {
+void GameManager::UpdateGame() {
+    if (IsKeyPressed(KEY_ESCAPE)) {
         UnloadGame();
         currentState = GameState::MENU;
         return;
@@ -53,42 +45,38 @@ void GameManager::UpdateGame()
     if (player)
         player->Update();
 
-    if (enemy)
+    if (enemy && player)
         enemy->FollowTarget(player->GetPosition());
 }
 
-void GameManager::Draw()
-{
+void GameManager::Draw() const {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    switch (currentState)
-    {
-    case GameState::MENU:
-        menu.Draw();
-        break;
+    switch (currentState) {
+        case GameState::MENU:
+            menu.Draw();
+            break;
 
-    case GameState::GAME:
-        if (player)
-            player->Draw();
-        if (enemy)
-            enemy->Draw();
-        break;
+        case GameState::GAME:
+            if (player)
+                player->Draw();
+            if (enemy)
+                enemy->Draw();
+            break;
 
-    case GameState::EXIT:
-        break;
+        case GameState::EXIT:
+            break;
     }
 
     EndDrawing();
 }
 
-bool GameManager::ShouldClose() const
-{
+bool GameManager::ShouldClose() const {
     return currentState == GameState::EXIT;
 }
 
-void GameManager::StartGame()
-{
+void GameManager::StartGame() {
     UnloadGame();
 
     player = new Player({400, 300}, menu.GetPlayerName());
@@ -96,8 +84,7 @@ void GameManager::StartGame()
     currentState = GameState::GAME;
 }
 
-void GameManager::UnloadGame()
-{
+void GameManager::UnloadGame() {
     delete player;
     delete enemy;
     player = nullptr;

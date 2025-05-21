@@ -1,8 +1,7 @@
 #include "../include/GameManager.h"
 #include "../include/Constants.h"
 
-int main()
-{
+int main() {
     SetExitKey(KEY_NULL);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
@@ -11,8 +10,7 @@ int main()
 
     GameManager game;
 
-    while (!game.ShouldClose())
-    {
+    while (!game.ShouldClose()) {
         game.Update();
         game.Draw();
     }

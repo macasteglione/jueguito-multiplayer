@@ -4,20 +4,21 @@
 #include "Character.h"
 #include <string>
 
-class Player : public Character
-{
-private:
+class Player final : public Character {
     float radius = 20.0f;
     std::string name;
 
 public:
-    explicit Player(Vector2 _position, std::string _name);
+    explicit Player(Vector2 _position, const std::string &_name);
+
     ~Player() override = default;
 
     void SetKeyControls();
+
     void SetBoundary();
 
     void Draw() const override;
+
     void Update() override;
 };
 

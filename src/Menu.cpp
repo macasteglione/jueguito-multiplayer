@@ -1,35 +1,31 @@
 #include "../include/Menu.h"
 #include "../include/Constants.h"
 
-Menu::Menu()
-{
+Menu::Menu() {
     UpdateLayout();
 }
 
-void Menu::UpdateLayout()
-{
-    float screenWidth = GetScreenWidth();
-    float screenHeight = GetScreenHeight();
+void Menu::UpdateLayout() {
+    const float screenWidth = GetScreenWidth();
+    const float screenHeight = GetScreenHeight();
 
-    float buttonWidth = 200;
-    float buttonHeight = 50;
+    constexpr float buttonWidth = 200;
+    constexpr float buttonHeight = 50;
 
     nameField = {screenWidth / 2 - buttonWidth / 2, screenHeight / 2 - 100, buttonWidth, 40};
     startButton = {screenWidth / 2 - buttonWidth / 2, screenHeight / 2, buttonWidth, buttonHeight};
     exitButton = {screenWidth / 2 - buttonWidth / 2, screenHeight / 2 + 70, buttonWidth, buttonHeight};
 }
 
-Menu::Option Menu::Update()
-{
+Menu::Option Menu::Update() {
     UpdateLayout(); // Asegura que los botones se ajusten si cambia la resolución
 
-    Vector2 mouse = GetMousePosition();
+    const Vector2 mouse = GetMousePosition();
 
     // Captura texto
     int key = GetKeyPressed();
-    while (key > 0)
-    {
-        if ((key >= 32) && (key <= 125) && playerName.length() < PLAYER_NAME_LENGTH)
+    while (key > 0) {
+        if (key >= 32 && key <= 125 && playerName.length() < PLAYER_NAME_LENGTH)
             playerName += static_cast<char>(key);
         key = GetKeyPressed();
     }
@@ -38,8 +34,8 @@ Menu::Option Menu::Update()
         playerName.pop_back();
 
     // Interacción
-    bool clickedStart = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, startButton);
-    bool pressedEnter = IsKeyPressed(KEY_ENTER);
+    const bool clickedStart = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, startButton);
+    const bool pressedEnter = IsKeyPressed(KEY_ENTER);
 
     if ((clickedStart || pressedEnter) && !playerName.empty())
         return START;
@@ -50,8 +46,7 @@ Menu::Option Menu::Update()
     return NONE;
 }
 
-void Menu::Draw() const
-{
+void Menu::Draw() const {
     // Nombre
     DrawRectangleLinesEx(nameField, 2, LIGHTGRAY);
     DrawText(nameText, nameField.x - MeasureText(nameText, TEXT_SIZE) - 10,
@@ -70,7 +65,6 @@ void Menu::Draw() const
              exitButton.y + (exitButton.height - TEXT_SIZE) / 2, TEXT_SIZE, BLACK);
 }
 
-std::string Menu::GetPlayerName() const
-{
+std::string Menu::GetPlayerName() const {
     return playerName;
 }

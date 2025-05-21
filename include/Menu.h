@@ -4,24 +4,21 @@
 #include <raylib.h>
 #include <string>
 
-class Menu
-{
-private:
-    Rectangle startButton;
-    Rectangle exitButton;
-    Rectangle nameField;
+class Menu {
+    Rectangle startButton{};
+    Rectangle exitButton{};
+    Rectangle nameField{};
 
     std::string playerName;
 
-    static constexpr const char *startText = "Jugar";
-    static constexpr const char *exitText = "Salir";
-    static constexpr const char *nameText = "Nombre:";
+    static constexpr auto startText = "Jugar";
+    static constexpr auto exitText = "Salir";
+    static constexpr auto nameText = "Nombre:";
 
     void UpdateLayout();
 
 public:
-    enum Option
-    {
+    enum Option {
         NONE,
         START,
         EXIT
@@ -30,7 +27,9 @@ public:
     Menu();
 
     Option Update();
+
     void Draw() const;
+
     std::string GetPlayerName() const;
 };
 
